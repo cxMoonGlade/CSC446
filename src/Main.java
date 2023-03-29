@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Main {
     // util fields
     private static final long size = 10; // Please modify manually
-    private static final float lambda1 = 1000f; // IAT, Please modify manually
-    private static final float lambda2 = 2000f; // ST, Please modify manually
+    private static final float lambda_iat = 1000f; // Please modify manually
+    private static final float lambda_st = 2000f; // Please modify manually
     public static long[] inter_arriving_time_array;
     public static long[] service_time_array;
     public static long[] arriving_time_array;
@@ -30,7 +30,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         // get the current time, which can be the time that everything starts
         start_time = System.currentTimeMillis();
-        TimeTable tasks = new TimeTable(lambda1, lambda2, size);
+        TimeTable tasks = new TimeTable(lambda_iat, lambda_st, size);
 
         setIAT(tasks.getInter_arriving_time());
         setST(tasks.getService_time_array());
