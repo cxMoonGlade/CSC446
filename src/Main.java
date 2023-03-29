@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Main {
     // util fields
     private static final long size = 10; // Please modify manually
-    private static final float lambda1 = 1000f; // Please modify manually
-    private static final float lambda2 = 2000f; // Please modify manually
+    private static final float lambda1 = 1000f; // IAT, Please modify manually
+    private static final float lambda2 = 2000f; // ST, Please modify manually
     public static long[] inter_arriving_time_array;
     public static long[] service_time_array;
     public static long[] arriving_time_array;
