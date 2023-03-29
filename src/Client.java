@@ -1,9 +1,13 @@
+/* Client, the object that contains all the info that we need to know from a client or need to mark the client
+ * You can always add or delete some fields in any necessary case.
+ */
 public class Client {
     private boolean serviced;
     private long service_time;
     private long service_start_time;
     private long inter_arrival_time;
     private long arrival_time;
+    private long waiting_time;
 
     private double time_in_system;
 
@@ -15,6 +19,7 @@ public class Client {
     }
 
 
+    // just some simple getters and setters
     public boolean isServiced() {
         return serviced;
     }
@@ -65,5 +70,13 @@ public class Client {
 
     public void setService_start_time(long service_start_time) {
         this.service_start_time = service_start_time;
+    }
+
+    public long getWaiting_time() {
+        return waiting_time;
+    }
+
+    public void setWaiting_time(long waiting_time) {
+        this.waiting_time = waiting_time;
     }
 }

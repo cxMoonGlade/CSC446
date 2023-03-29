@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/* To create a timetable to mark the clients
+ *
+ */
 public class TimeTable {
     private long[] inter_arriving_time_array;
     private long[] service_time_array;
