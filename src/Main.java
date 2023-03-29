@@ -49,18 +49,6 @@ public class Main {
     }
 
 
-
-
-        /*
-        CompletableFuture<Boolean> cf2 = CompletableFuture.supplyAsync(()->{
-
-        });
-        */
-
-
-        // 4 servers
-
-
     static boolean addClient(BlockingQueue<Client> clients, int idx){
         try{
             clients.add(new Client(service_time_array[idx], inter_arriving_time_array[idx],
