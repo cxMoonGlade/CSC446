@@ -2,28 +2,39 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+/* Main is the engineer and initializer for everything
+ * Will need you to add some methods to work the final answer out
+ * I only have the total waiting time yet
+ */
 public class Main {
-    private static final long size = 10;
-    private static final float lambda1 = 1000f;
-    private static final float lambda2 = 2000f;
+    // util fields
+    private static final long size = 10; // Please modify manually
+    private static final float lambda1 = 1000f; // Please modify manually
+    private static final float lambda2 = 2000f; // Please modify manually
     public static long[] inter_arriving_time_array;
     public static long[] service_time_array;
     public static long[] arriving_time_array;
     public static BlockingQueue<Client> clients;
-    static BlockingQueue<Runnable> bq;
-    private static double max_workload = 0d;
-    private static AtomicLong total_waiting_time = new AtomicLong(0l);
+    public static long start_time;
     private static AtomicLong concurrent_users = new AtomicLong(0l);
-    private static float server_load = 0f;
+
+
+    // final calculation fields
+    private static AtomicLong total_waiting_time = new AtomicLong(0l);
+    private float server_load = 0f;
+    private double max_workload = 0d;
+
+
 
 
     public static void main(String[] args) throws Exception {
-        long currentTime = System.currentTimeMillis();
+        // get the current time, which can be the time that everything starts
+        start_time = System.currentTimeMillis();
         TimeTable tasks = new TimeTable(lambda1, lambda2, size);
 
-        setIAT(currentTime, tasks.getInter_arriving_time());
-        setST(currentTime, tasks.getService_time_array());
-        setAT(currentTime);
+        setIAT(tasks.getInter_arriving_time());
+        setST(tasks.getService_time_array());
+        setAT(start_time);
 
 
 
@@ -71,7 +82,7 @@ public class Main {
     }
 
 
-    public static void setIAT(long currentTime, long[] src) {
+    public static void setIAT(long[] src) {
         List<Long> res = new ArrayList<>();
         for (long d : src) {
             res.add(d+0);
@@ -79,7 +90,7 @@ public class Main {
         inter_arriving_time_array = res.stream().mapToLong(i -> i).toArray();
     }
 
-    public static void setST(long currentTime, long[] src) {
+    public static void setST(long[] src) {
         List<Long> res = new ArrayList<>();
         for (long d : src) {
             res.add(d);
