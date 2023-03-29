@@ -8,9 +8,9 @@ public class TimeTable {
     private long[] inter_arriving_time_array;
     private long[] service_time_array;
 
-    public TimeTable(float lambda1, float lambda2, long size){
-        setInterArrivingTime(lambda1, size);
-        setService_time_array(lambda2, size);
+    public TimeTable(float lambda_iat, float lambda_st, long size){
+        setInterArrivingTime(lambda_iat, size);
+        setService_time_array(lambda_st, size);
     }
 
 
