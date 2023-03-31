@@ -2,9 +2,9 @@ import java.util.concurrent.*;
 
 public class Server implements Runnable{
     private BlockingQueue<Client> queue;
-    private long size;
+    private int size;
 
-    public Server(BlockingQueue<Client> q, long size){
+    public Server(BlockingQueue<Client> q, int size){
         this.queue = q;
         this.size = size;
     }
@@ -29,12 +29,20 @@ public class Server implements Runnable{
     //*
     @Override
     public void run(){
-        ExecutorService es = Executors.newFixedThreadPool(12);
-        while (Main.getConcurrent_users()<size){
-            Runnable t1 = new Handler(queue, size);
-            es.submit(t1);
+        ThreadPoolExecutor es = new ThreadPoolExecutor(12,12, 0L,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
+        while (Main.getConcurrent_users() < size){
+
+            if (Main.clients.size() > 0){
+                es.execute(()->{
+                    new Handler(queue, size).start();
+                });
+            }else {
+                Thread.yield();
+            }
         }
         es.shutdown();
+        System.out.println(Main.getTotal_Waiting_Time());
     }
      //*/
 }
@@ -51,19 +59,26 @@ class Single extends Thread{
     }
 
     public void run(){
-        ExecutorService es = Executors.newFixedThreadPool(4);
-        while(Main.getConcurrent_users() < size ){
-            Runnable t1 = new Handler(queue, size);
-            es.submit(t1);
+        ThreadPoolExecutor es = new ThreadPoolExecutor(4,4, 0L,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
+        while (Main.getConcurrent_users() < size){
+            if (Main.clients.size() > 0){
+                es.execute(()->{
+                    new Handler(queue, size).start();
+                });
+            }else {
+                Thread.yield();
+            }
         }
         es.shutdown();
+        System.out.println(Main.getTotal_Waiting_Time());
     }
 }
 
 /* Handler stands for client handler
  *
  */
-class Handler implements  Runnable{
+class Handler extends Thread{
     private BlockingQueue<Client> queue;
     private long size;
     public Handler(BlockingQueue<Client> queue, long size){
@@ -97,8 +112,8 @@ class Handler implements  Runnable{
                 Main.addWaiting(client.getWaiting_time());
             }
             else if (Main.getConcurrent_users() < size) {
-                Thread.sleep(20);
+                Thread.yield();
             }
-        }catch (Exception e){e.toString();}
+        }catch (Exception e){}
     }
 }

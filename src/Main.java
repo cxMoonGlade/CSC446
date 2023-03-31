@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Main {
     // util fields
-    private static final long size = 10; // Please modify manually
-    private static final float lambda_iat = 1000f; // Please modify manually
-    private static final float lambda_st = 2000f; // Please modify manually
+    private static final int size = 50000; // Please modify manually
+    private static final float lambda_iat = 2f; // Please modify manually
+    private static final float lambda_st = 3f; // Please modify manually
     public static long[] inter_arriving_time_array;
     public static long[] service_time_array;
     public static long[] arriving_time_array;
@@ -38,7 +38,7 @@ public class Main {
 
 
 
-        clients = new LinkedBlockingQueue<>();
+        clients = new ArrayBlockingQueue<>(size);
         Pusher pusher = new Pusher(clients, size);
         Server server1 = new Server(clients, size);
 
@@ -96,5 +96,9 @@ public class Main {
 
     public static long getConcurrent_users(){
         return  concurrent_users.get();
+    }
+
+    public static long getTotal_Waiting_Time(){
+        return total_waiting_time.get();
     }
 }

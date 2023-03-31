@@ -17,5 +17,6 @@
         "c:\\Users\\azirb\\Downloads\\spring-5.2.9.RELEASE-dist\\spring-framework-5.2.9.RELEASE\\libs\\spring-context-5.2.9.RELEASE-javadoc.jar",
         "c:\\Users\\azirb\\Downloads\\spring-5.2.9.RELEASE-dist\\spring-framework-5.2.9.RELEASE\\libs\\spring-context-5.2.9.RELEASE-sources.jar",
         "c:\\Users\\azirb\\Downloads\\spring-5.2.9.RELEASE-dist\\spring-framework-5.2.9.RELEASE\\libs\\spring-context-indexer-5.2.9.RELEASE.jar"
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
