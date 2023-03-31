@@ -1,8 +1,8 @@
 import java.util.concurrent.*;
 
 public class Server implements Runnable{
-    private BlockingQueue<Client> queue;
-    private int size;
+    private final BlockingQueue<Client> queue;
+    private final int size;
 
     public Server(BlockingQueue<Client> q, int size){
         this.queue = q;
@@ -34,15 +34,18 @@ public class Server implements Runnable{
         while (Main.getConcurrent_users() < size){
 
             if (Main.clients.size() > 0){
-                es.execute(()->{
-                    new Handler(queue, size).start();
-                });
+                es.execute(()-> new Handler(queue, size).start());
             }else {
                 Thread.yield();
             }
         }
-        es.shutdown();
         System.out.println(Main.getTotal_Waiting_Time());
+        es.shutdown();
+        // you can add any operations in any needed case
+
+
+        //
+        System.exit(0);
     }
      //*/
 }
@@ -51,8 +54,8 @@ public class Server implements Runnable{
  * creates a threadPool with fixed 4 core threads.
  */
 class Single extends Thread{
-    private BlockingQueue<Client> queue;
-    private long size;
+    private final BlockingQueue<Client> queue;
+    private final long size;
     public Single(BlockingQueue<Client> queue, long size){
         this.size = size;
         this.queue = queue;
@@ -63,9 +66,7 @@ class Single extends Thread{
                 TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
         while (Main.getConcurrent_users() < size){
             if (Main.clients.size() > 0){
-                es.execute(()->{
-                    new Handler(queue, size).start();
-                });
+                es.execute(()-> new Handler(queue, size).start());
             }else {
                 Thread.yield();
             }
@@ -79,8 +80,8 @@ class Single extends Thread{
  *
  */
 class Handler extends Thread{
-    private BlockingQueue<Client> queue;
-    private long size;
+    private final BlockingQueue<Client> queue;
+    private final long size;
     public Handler(BlockingQueue<Client> queue, long size){
         this.size = size;
         this.queue = queue;

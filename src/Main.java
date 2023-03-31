@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Main {
     // util fields
-    private static final int size = 50000; // Please modify manually
+    private static final int size = 5000; // Please modify manually
     private static final float lambda_iat = 2f; // Please modify manually
     private static final float lambda_st = 3f; // Please modify manually
     public static long[] inter_arriving_time_array;
@@ -16,18 +16,18 @@ public class Main {
     public static long[] arriving_time_array;
     public static BlockingQueue<Client> clients;
     public static long start_time;
-    private static AtomicLong concurrent_users = new AtomicLong(0l);
+    private static final AtomicLong concurrent_users = new AtomicLong(0L);
 
 
     // final calculation fields
-    private static AtomicLong total_waiting_time = new AtomicLong(0l);
+    private static final AtomicLong total_waiting_time = new AtomicLong(0L);
     private float server_load = 0f;
     private double max_workload = 0d;
 
 
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         // get the current time, which can be the time that everything starts
         start_time = System.currentTimeMillis();
         TimeTable tasks = new TimeTable(lambda_iat, lambda_st, size);
@@ -48,18 +48,6 @@ public class Main {
 
     }
 
-
-    static boolean addClient(BlockingQueue<Client> clients, int idx){
-        try{
-            clients.add(new Client(service_time_array[idx], inter_arriving_time_array[idx],
-                    arriving_time_array[idx]) );
-            return true;
-        }catch (Exception e){
-            e.getStackTrace();
-            return false;
-        }
-    }
-
     private static void setAT(long currentTime){
         arriving_time_array = new long[inter_arriving_time_array.length];
         arriving_time_array[0] = 0;
@@ -73,7 +61,7 @@ public class Main {
     public static void setIAT(long[] src) {
         List<Long> res = new ArrayList<>();
         for (long d : src) {
-            res.add(d+0);
+            res.add(d);
         }
         inter_arriving_time_array = res.stream().mapToLong(i -> i).toArray();
     }
