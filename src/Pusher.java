@@ -18,7 +18,7 @@ public class Pusher implements Runnable{
             Client client = new Client(Main.service_time_array[i], Main.inter_arriving_time_array[i]
                     , timer);
             queue.add(client);
-            System.out.println("add a client->" + i);// you can always delete or change this line
+            // System.out.println("add a client->" + i);// you can always delete or change this line
 
             // after the clients clearly identified and added to the queue,
             // let the thread sleep to simulate the processing.

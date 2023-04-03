@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /* To create a timetable to mark the clients
- *
+ * Generate the inter-arriving time and service time
  */
 public class TimeTable {
     private long[] inter_arriving_time_array;

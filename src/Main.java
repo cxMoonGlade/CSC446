@@ -21,8 +21,10 @@ public class Main {
 
     // final calculation fields
     private static final AtomicLong total_waiting_time = new AtomicLong(0L);
+    private static final AtomicLong total_service_time = new AtomicLong(0L);
+    private static final AtomicLong max_workload = new AtomicLong(0L);
     private float server_load = 0f;
-    private double max_workload = 0d;
+    // private double max_workload = 0d;
 
 
 
@@ -44,7 +46,7 @@ public class Main {
 
         new Thread(pusher).start();
         new Thread(server1).start();
-        System.out.println("START!");
+        System.out.println("Start simulation.");
 
     }
 
@@ -78,15 +80,35 @@ public class Main {
     public static void addWaiting(long waiting){
         total_waiting_time.set(waiting + total_waiting_time.get());
     }
+    
     public static void addConcurrentUser(){
         concurrent_users.incrementAndGet();
     }
 
-    public static long getConcurrent_users(){
-        return  concurrent_users.get();
-    }
 
+    public static void addServiceTime(long serviceTime){
+        total_service_time.addAndGet(serviceTime);
+    }
+    public static void updateMaxWorkload(long workload) {
+        long currentMax;
+        do {
+            currentMax = max_workload.get();
+            if (workload <= currentMax) {
+                break;
+            }
+        } while (!max_workload.compareAndSet(currentMax, workload));
+    }
+    // total requests processed
+    public static long getConcurrent_users(){
+        return concurrent_users.get();
+    }
     public static long getTotal_Waiting_Time(){
         return total_waiting_time.get();
+    }
+    public static long getMaxWorkload() {
+        return max_workload.get();
+    }
+    public static long getTotal_Service_Time(){
+        return total_service_time.get();
     }
 }
