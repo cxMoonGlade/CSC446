@@ -8,8 +8,12 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Main {
     // util fields
+<<<<<<< HEAD
     // private static final int size = 5000;
     private static int size;
+=======
+    private static final int size = 10000; // Please modify manually
+>>>>>>> 80be3f7d25962ec0fbea6417590950eb8ae2a4f1
     private static final float lambda_iat = 2f; // Please modify manually
     private static final float lambda_st = 3f; // Please modify manually
     public static long[] inter_arriving_time_array;
