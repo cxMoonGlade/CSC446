@@ -46,7 +46,7 @@ public class Server implements Runnable{
                 Thread.yield();
             }
         }
-
+        es.shutdown();
         System.out.println("----------------------------------------");
         System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users());
         System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time());
@@ -56,7 +56,7 @@ public class Server implements Runnable{
         System.out.println("Average service time: " + (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
         System.out.println("----------------------------------------");
         System.out.println("Servers are shutting down...");
-        es.shutdown();
+
         // you can add any operations in any needed case
         System.out.println("Servers are closed.");
         System.out.println("End of the simulation.");
@@ -98,7 +98,6 @@ class Single extends Thread{
         System.out.println("Average service time: " + (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
         System.out.println("----------------------------------------");
         System.out.println("Servers are shutting down...");
-        es.shutdown();
         // you can add any operations in any needed case
         System.out.println("Servers are closed.");
         System.out.println("End of the simulation.");
