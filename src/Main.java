@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Main {
     // util fields
-    private static final int size = 5000; // Please modify manually
+    private static final int size = 10000; // Please modify manually
     private static final float lambda_iat = 2f; // Please modify manually
     private static final float lambda_st = 3f; // Please modify manually
     public static long[] inter_arriving_time_array;
@@ -23,8 +23,6 @@ public class Main {
     private static final AtomicLong total_waiting_time = new AtomicLong(0L);
     private static final AtomicLong total_service_time = new AtomicLong(0L);
     private static final AtomicLong max_workload = new AtomicLong(0L);
-    private float server_load = 0f;
-    // private double max_workload = 0d;
 
 
 

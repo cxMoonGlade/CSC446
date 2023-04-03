@@ -9,9 +9,10 @@ public class Server implements Runnable{
         this.size = size;
     }
     // hide this part for non-priority run()
-    /*
+    ///*
     @Override
     public void run() {
+        System.out.println("Servers are starting...");
         Thread t1 = new Single(queue, size);
         t1.setPriority(10);
         Thread t2 = new Single(queue, size);
@@ -19,29 +20,33 @@ public class Server implements Runnable{
         Thread t3 = new Single(queue, size);
         t3.setPriority(1);
         t1.start();
+        System.out.println("Highest Priority Server is starting...");
         t2.start();
+        System.out.println("Medium Priority Server is starting...");
         t3.start();
+        System.out.println("Lowest Priority Server is starting...");
+
     }
-    */
+    //*/
 
     // hide this part for priority run.
     // use 12 threads = 3(serves) * 4(threads per server) 
-    //*
+    /*
     @Override
     public void run(){
-        System.out.println("Server is starting...");
+        System.out.println("Servers are starting...");
         System.out.println("----------------------------------------");
         ThreadPoolExecutor es = new ThreadPoolExecutor(12,12, 0L,
                 TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
         System.out.println("Thread pool is created.");
         while (Main.getConcurrent_users() < size){
-
             if (Main.clients.size() > 0){
                 es.execute(()-> new Handler(queue, size).start());
             }else {
                 Thread.yield();
             }
         }
+
         System.out.println("----------------------------------------");
         System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users());
         System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time());
@@ -50,15 +55,15 @@ public class Server implements Runnable{
         System.out.println("Average waiting time: " + (Main.getTotal_Waiting_Time() / (double) Main.getConcurrent_users()));
         System.out.println("Average service time: " + (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
         System.out.println("----------------------------------------");
-        System.out.println("Server is shutting down...");
+        System.out.println("Servers are shutting down...");
         es.shutdown();
         // you can add any operations in any needed case
-        System.out.println("Server is closed.");
+        System.out.println("Servers are closed.");
         System.out.println("End of the simulation.");
         //
         System.exit(0);
     }
-     //*/
+     */
 }
 
 /* Single stands for single server.
@@ -83,7 +88,25 @@ class Single extends Thread{
             }
         }
         es.shutdown();
-        System.out.println(Main.getTotal_Waiting_Time());
+        if (Thread.currentThread().getPriority() == 1){
+        System.out.println("----------------------------------------");
+        System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users());
+        System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time());
+        System.out.println("Total service time: " + Main.getTotal_Service_Time());
+        System.out.println("Maximum workload: " + Main.getMaxWorkload());
+        System.out.println("Average waiting time: " + (Main.getTotal_Waiting_Time() / (double) Main.getConcurrent_users()));
+        System.out.println("Average service time: " + (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
+        System.out.println("----------------------------------------");
+        System.out.println("Servers are shutting down...");
+        es.shutdown();
+        // you can add any operations in any needed case
+        System.out.println("Servers are closed.");
+        System.out.println("End of the simulation.");
+        System.exit(0);
+        //
+        }
+
+
     }
 }
 
