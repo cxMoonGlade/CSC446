@@ -1,4 +1,5 @@
 import java.util.concurrent.*;
+import java.io.*;
 
 public class Server implements Runnable{
     private final BlockingQueue<Client> queue;
@@ -55,10 +56,29 @@ public class Server implements Runnable{
         // you can add any operations in any needed case
         System.out.println("Server is closed.");
         System.out.println("End of the simulation.");
-        //
+        writeToCSV(Main.getConcurrent_users(), Main.getTotal_Waiting_Time(), Main.getTotal_Service_Time(), Main.getMaxWorkload(), (Main.getTotal_Waiting_Time() / (double) Main.getConcurrent_users()), (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
+        
         System.exit(0);
     }
-     //*/
+    public static void writeToCSV(long concurrentUsers, long totalWaitingTime, long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
+        String fileName = "results.csv";
+        File file = new File(fileName);
+        try (FileWriter fileWriter = new FileWriter(file, true);
+            PrintWriter printWriter = new PrintWriter(fileWriter)) {
+            // If the file is empty, write the header row
+            if (file.length() == 0) {
+                printWriter.println("Concurrent Users,Total Waiting Time,Total Service Time,Maximum Workload,Average Waiting Time,Average Service Time");
+            }
+    
+            // Write the data row
+            printWriter.printf("%d,%d,%d,%d,%.2f,%.2f%n", concurrentUsers, totalWaitingTime, totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
+    
+        } catch (IOException e) {
+            System.err.println("Error writing to CSV file: " + e.getMessage());
+        }
+    }
+    
+    
 }
 
 /* Single stands for single server.

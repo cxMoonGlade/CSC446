@@ -8,7 +8,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Main {
     // util fields
-    private static final int size = 5000; // Please modify manually
+    // private static final int size = 5000;
+    private static int size;
     private static final float lambda_iat = 2f; // Please modify manually
     private static final float lambda_st = 3f; // Please modify manually
     public static long[] inter_arriving_time_array;
@@ -23,13 +24,13 @@ public class Main {
     private static final AtomicLong total_waiting_time = new AtomicLong(0L);
     private static final AtomicLong total_service_time = new AtomicLong(0L);
     private static final AtomicLong max_workload = new AtomicLong(0L);
-    private float server_load = 0f;
-    // private double max_workload = 0d;
 
 
+    public static void main(String[] args) {
+        // get the size of the simulation
+        // Generate a random number between 1 and 5000 for the current simulation
+        size = new Random().nextInt(5000) + 1;
 
-
-    public static void main(String[] args){
         // get the current time, which can be the time that everything starts
         start_time = System.currentTimeMillis();
         TimeTable tasks = new TimeTable(lambda_iat, lambda_st, size);
@@ -46,8 +47,7 @@ public class Main {
 
         new Thread(pusher).start();
         new Thread(server1).start();
-        System.out.println("Start simulation.");
-
+        System.out.println("Simulation started with " + size + " concurrent users.");
     }
 
     private static void setAT(long currentTime){
