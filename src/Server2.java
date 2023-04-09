@@ -41,7 +41,7 @@ public class Server2 implements Runnable{
         writeToCSV(Main.getConcurrent_users_2(), Main.getTotal_Waiting_Time_2(), Main.getTotal_Service_Time_2(),
                 Main.getMaxWorkload_2(), (Main.getTotal_Waiting_Time_2() / (double) Main.getConcurrent_users_2()),
                 (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
-        writeToCSV2(Main.getConcurrent_users_1()-Main.getConcurrent_users_2(),
+        writeToCSV2(Main.getConcurrent_users_1(),
                 Main.getTotal_Waiting_Time_1()-Main.getTotal_Waiting_Time_2(),
                 Main.getTotal_Service_Time_1()-Main.getTotal_Service_Time_2(),
                 Main.getMaxWorkload_1()-Main.getMaxWorkload_2(),
