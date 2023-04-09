@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -99,7 +103,6 @@ public class Main {
         }
         service_time_array = res.stream().mapToLong(i -> i).toArray();
     }
-
 
     public static void addWaiting_1(long waiting){
         total_waiting_time_1.set(waiting + total_waiting_time_1.get());

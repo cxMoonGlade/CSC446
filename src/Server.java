@@ -72,7 +72,7 @@ class Single extends Thread{
             Main.step1 = false;
         }
     }
-    public static void writeToCSV(long concurrentUsers, long totalWaitingTime,
+    private static void writeToCSV(long concurrentUsers, long totalWaitingTime,
                                   long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
         String fileName = "results_1.csv";
         File file1 = new File(fileName);

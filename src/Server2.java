@@ -38,11 +38,21 @@ public class Server2 implements Runnable{
         // you can add any operations in any needed case
         System.out.println("Servers-2 are closed.");
         System.out.println("End of the Servers-2 simulation.");
-        writeToCSV(Main.getConcurrent_users_2(), Main.getTotal_Waiting_Time_2(), Main.getTotal_Service_Time_2(), Main.getMaxWorkload_2(), (Main.getTotal_Waiting_Time_2() / (double) Main.getConcurrent_users_2()), (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
-
+        writeToCSV(Main.getConcurrent_users_2(), Main.getTotal_Waiting_Time_2(), Main.getTotal_Service_Time_2(),
+                Main.getMaxWorkload_2(), (Main.getTotal_Waiting_Time_2() / (double) Main.getConcurrent_users_2()),
+                (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
+        writeToCSV2(Main.getConcurrent_users_1()-Main.getConcurrent_users_2(),
+                Main.getTotal_Waiting_Time_1()-Main.getTotal_Waiting_Time_2(),
+                Main.getTotal_Service_Time_1()-Main.getTotal_Service_Time_2(),
+                Main.getMaxWorkload_1()-Main.getMaxWorkload_2(),
+                (Main.getTotal_Waiting_Time_1()) / (double)Main.getConcurrent_users_1() -
+                        (Main.getTotal_Waiting_Time_2() / (double) Main.getConcurrent_users_2()),
+                (Main.getTotal_Service_Time_1() / (double) Main.getConcurrent_users_1())-
+                        (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
+        System.out.println("done");
         System.exit(0);
     }
-    public static void writeToCSV(long concurrentUsers, long totalWaitingTime,
+    private static void writeToCSV(long concurrentUsers, long totalWaitingTime,
         long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
         String fileName = "results_2.csv";
         File file2 = new File(fileName);
@@ -56,6 +66,26 @@ public class Server2 implements Runnable{
             // Write the data row
             printWriter.printf("%d,%d,%d,%d,%.2f,%.2f%n", concurrentUsers, totalWaitingTime,
                 totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
+
+        } catch (IOException e) {
+            System.err.println("Error writing to CSV file: " + e.getMessage());
+        }
+    }
+
+    private static void writeToCSV2(long concurrentUsers, long totalWaitingTime,
+                                   long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
+        String fileName = "results_3.csv";
+        File file3 = new File(fileName);
+        try (FileWriter fileWriter = new FileWriter(file3, true);
+             PrintWriter printWriter = new PrintWriter(fileWriter)) {
+            // If the file is empty, write the header row
+            if (file3.length() == 0) {
+                printWriter.println("Concurrent Users,Total Waiting Time,Total Service Time, Maximum Workload,Average Waiting Time,Average Service Time");
+            }
+
+            // Write the data row
+            printWriter.printf("%d,%d,%d,%d,%.2f,%.2f%n", concurrentUsers, totalWaitingTime,
+                    totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
 
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
