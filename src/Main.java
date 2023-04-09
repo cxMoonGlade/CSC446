@@ -8,12 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Main {
     // util fields
-<<<<<<< HEAD
-    // private static final int size = 5000;
     private static int size;
-=======
-    private static final int size = 10000; // Please modify manually
->>>>>>> 80be3f7d25962ec0fbea6417590950eb8ae2a4f1
     private static final float lambda_iat = 2f; // Please modify manually
     private static final float lambda_st = 3f; // Please modify manually
     public static long[] inter_arriving_time_array;
@@ -21,13 +16,21 @@ public class Main {
     public static long[] arriving_time_array;
     public static BlockingQueue<Client> clients;
     public static long start_time;
-    private static final AtomicLong concurrent_users = new AtomicLong(0L);
+    public static boolean step1 = true;
+    private static boolean step_2 = false;
+
 
 
     // final calculation fields
-    private static final AtomicLong total_waiting_time = new AtomicLong(0L);
-    private static final AtomicLong total_service_time = new AtomicLong(0L);
-    private static final AtomicLong max_workload = new AtomicLong(0L);
+    private static final AtomicLong concurrent_users_1 = new AtomicLong(0L);
+    private static final AtomicLong total_waiting_time_1 = new AtomicLong(0L);
+    private static final AtomicLong total_service_time_1 = new AtomicLong(0L);
+    private static final AtomicLong max_workload_1 = new AtomicLong(0L);
+
+    private static final AtomicLong concurrent_users_2 = new AtomicLong(0L);
+    private static final AtomicLong total_waiting_time_2 = new AtomicLong(0L);
+    private static final AtomicLong total_service_time_2 = new AtomicLong(0L);
+    private static final AtomicLong max_workload_2 = new AtomicLong(0L);
 
 
     public static void main(String[] args) {
@@ -52,6 +55,23 @@ public class Main {
         new Thread(pusher).start();
         new Thread(server1).start();
         System.out.println("Simulation started with " + size + " concurrent users.");
+
+
+        while(!step_2){if (step1){
+            Thread.yield();
+        }else {
+            clients = new ArrayBlockingQueue<>(size);
+            // get the current time, which can be the time that everything starts
+            System.out.println("\n\nStep-2 Starts");
+            start_time = System.currentTimeMillis();
+            pusher = new Pusher(clients, size);
+            Server2 server2 = new Server2(clients, size);
+
+            new Thread(pusher).start();
+            new Thread(server2).start();
+            System.out.println("Simulation started with " + size + " concurrent users.");
+            break;
+        }}
     }
 
     private static void setAT(long currentTime){
@@ -81,38 +101,72 @@ public class Main {
     }
 
 
-    public static void addWaiting(long waiting){
-        total_waiting_time.set(waiting + total_waiting_time.get());
+    public static void addWaiting_1(long waiting){
+        total_waiting_time_1.set(waiting + total_waiting_time_1.get());
     }
     
-    public static void addConcurrentUser(){
-        concurrent_users.incrementAndGet();
+    public static void addConcurrentUser_1(){
+        concurrent_users_1.incrementAndGet();
     }
 
 
-    public static void addServiceTime(long serviceTime){
-        total_service_time.addAndGet(serviceTime);
+    public static void addServiceTime_1(long serviceTime){
+        total_service_time_1.addAndGet(serviceTime);
     }
-    public static void updateMaxWorkload(long workload) {
+    public static void updateMaxWorkload_1(long workload) {
         long currentMax;
         do {
-            currentMax = max_workload.get();
+            currentMax = max_workload_1.get();
             if (workload <= currentMax) {
                 break;
             }
-        } while (!max_workload.compareAndSet(currentMax, workload));
+        } while (!max_workload_1.compareAndSet(currentMax, workload));
     }
     // total requests processed
-    public static long getConcurrent_users(){
-        return concurrent_users.get();
+    public static long getConcurrent_users_1(){
+        return concurrent_users_1.get();
     }
-    public static long getTotal_Waiting_Time(){
-        return total_waiting_time.get();
+    public static long getTotal_Waiting_Time_1(){
+        return total_waiting_time_1.get();
     }
-    public static long getMaxWorkload() {
-        return max_workload.get();
+    public static long getMaxWorkload_1() {
+        return max_workload_1.get();
     }
-    public static long getTotal_Service_Time(){
-        return total_service_time.get();
+    public static long getTotal_Service_Time_1(){
+        return total_service_time_1.get();
+    }
+    public static void addWaiting_2(long waiting){
+        total_waiting_time_2.set(waiting + total_waiting_time_1.get());
+    }
+
+    public static void addConcurrentUser_2(){
+        concurrent_users_2.incrementAndGet();
+    }
+
+
+    public static void addServiceTime_2(long serviceTime){
+        total_service_time_2.addAndGet(serviceTime);
+    }
+    public static void updateMaxWorkload_2(long workload) {
+        long currentMax;
+        do {
+            currentMax = max_workload_2.get();
+            if (workload <= currentMax) {
+                break;
+            }
+        } while (!max_workload_2.compareAndSet(currentMax, workload));
+    }
+    // total requests processed
+    public static long getConcurrent_users_2(){
+        return concurrent_users_2.get();
+    }
+    public static long getTotal_Waiting_Time_2(){
+        return total_waiting_time_2.get();
+    }
+    public static long getMaxWorkload_2() {
+        return max_workload_2.get();
+    }
+    public static long getTotal_Service_Time_2(){
+        return total_service_time_2.get();
     }
 }

@@ -28,69 +28,6 @@ public class Server implements Runnable{
         System.out.println("Lowest Priority Server is starting...");
 
     }
-    //*/
-
-    // hide this part for priority run.
-    // use 12 threads = 3(serves) * 4(threads per server) 
-    /*
-    @Override
-    public void run(){
-        System.out.println("Servers are starting...");
-        System.out.println("----------------------------------------");
-        ThreadPoolExecutor es = new ThreadPoolExecutor(12,12, 0L,
-                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
-        System.out.println("Thread pool is created.");
-        while (Main.getConcurrent_users() < size){
-            if (Main.clients.size() > 0){
-                es.execute(()-> new Handler(queue, size).start());
-            }else {
-                Thread.yield();
-            }
-        }
-        es.shutdown();
-        System.out.println("----------------------------------------");
-        System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users());
-        System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time());
-        System.out.println("Total service time: " + Main.getTotal_Service_Time());
-        System.out.println("Maximum workload: " + Main.getMaxWorkload());
-        System.out.println("Average waiting time: " + (Main.getTotal_Waiting_Time() / (double) Main.getConcurrent_users()));
-        System.out.println("Average service time: " + (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
-        System.out.println("----------------------------------------");
-        System.out.println("Servers are shutting down...");
-
-        // you can add any operations in any needed case
-        System.out.println("Servers are closed.");
-        System.out.println("End of the simulation.");
-        writeToCSV(Main.getConcurrent_users(), Main.getTotal_Waiting_Time(), Main.getTotal_Service_Time(), Main.getMaxWorkload(), (Main.getTotal_Waiting_Time() / (double) Main.getConcurrent_users()), (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
-        
-        System.exit(0);
-    }
-<<<<<<< HEAD
-    public static void writeToCSV(long concurrentUsers, long totalWaitingTime, 
-        long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
-        String fileName = "results.csv";
-        File file = new File(fileName);
-        try (FileWriter fileWriter = new FileWriter(file, true);
-            PrintWriter printWriter = new PrintWriter(fileWriter)) {
-            // If the file is empty, write the header row
-            if (file.length() == 0) {
-                printWriter.println("Concurrent Users,Total Waiting Time,Total Service Time,
-                    Maximum Workload,Average Waiting Time,Average Service Time");
-            }
-    
-            // Write the data row
-            printWriter.printf("%d,%d,%d,%d,%.2f,%.2f%n", concurrentUsers, totalWaitingTime, 
-                totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
-    
-        } catch (IOException e) {
-            System.err.println("Error writing to CSV file: " + e.getMessage());
-        }
-    }
-    
-    
-=======
-     */
->>>>>>> 80be3f7d25962ec0fbea6417590950eb8ae2a4f1
 }
 
 /* Single stands for single server.
@@ -107,7 +44,7 @@ class Single extends Thread{
     public void run(){
         ThreadPoolExecutor es = new ThreadPoolExecutor(4,4, 0L,
                 TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
-        while (Main.getConcurrent_users() < size){
+        while (Main.getConcurrent_users_1() < size){
             if (Main.clients.size() > 0){
                 es.execute(()-> new Handler(queue, size).start());
             }else {
@@ -116,23 +53,43 @@ class Single extends Thread{
         }
         es.shutdown();
         if (Thread.currentThread().getPriority() == 1){
-        System.out.println("----------------------------------------");
-        System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users());
-        System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time());
-        System.out.println("Total service time: " + Main.getTotal_Service_Time());
-        System.out.println("Maximum workload: " + Main.getMaxWorkload());
-        System.out.println("Average waiting time: " + (Main.getTotal_Waiting_Time() / (double) Main.getConcurrent_users()));
-        System.out.println("Average service time: " + (Main.getTotal_Service_Time() / (double) Main.getConcurrent_users()));
-        System.out.println("----------------------------------------");
-        System.out.println("Servers are shutting down...");
-        // you can add any operations in any needed case
-        System.out.println("Servers are closed.");
-        System.out.println("End of the simulation.");
-        System.exit(0);
-        //
+            System.out.println("----------------------------------------");
+            System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users_1());
+            System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time_1());
+            System.out.println("Total service time: " + Main.getTotal_Service_Time_1());
+            System.out.println("Maximum workload: " + Main.getMaxWorkload_1());
+            System.out.println("Average waiting time: " + (Main.getTotal_Waiting_Time_1() / (double) Main.getConcurrent_users_1()));
+            System.out.println("Average service time: " + (Main.getTotal_Service_Time_1() / (double) Main.getConcurrent_users_1()));
+            System.out.println("----------------------------------------");
+            System.out.println("Servers-1 are shutting down...");
+            // you can add any operations in any needed case
+            System.out.println("Servers-1 are closed.");
+            System.out.println("End of the Servers-1 simulation.");
+
+            writeToCSV(Main.getConcurrent_users_1(), Main.getTotal_Waiting_Time_1(), Main.getTotal_Service_Time_1(), Main.getMaxWorkload_1(), (Main.getTotal_Waiting_Time_1() / (double) Main.getConcurrent_users_1()), (Main.getTotal_Service_Time_1() / (double) Main.getConcurrent_users_1()));
+            //System.exit(0);
+            System.out.println("Step-1 finished");
+            Main.step1 = false;
         }
+    }
+    public static void writeToCSV(long concurrentUsers, long totalWaitingTime,
+                                  long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
+        String fileName = "results_1.csv";
+        File file1 = new File(fileName);
+        try (FileWriter fileWriter = new FileWriter(file1, true);
+             PrintWriter printWriter = new PrintWriter(fileWriter)) {
+            // If the file is empty, write the header row
+            if (file1.length() == 0) {
+                printWriter.println("Concurrent Users,Total Waiting Time,Total Service Time, Maximum Workload,Average Waiting Time,Average Service Time");
+            }
 
+            // Write the data row
+            printWriter.printf("%d,%d,%d,%d,%.2f,%.2f%n", concurrentUsers, totalWaitingTime,
+                    totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
 
+        } catch (IOException e) {
+            System.err.println("Error writing to CSV file: " + e.getMessage());
+        }
     }
 }
 
@@ -169,12 +126,12 @@ class Handler extends Thread{
 
                 // here is a call back method example.
                 // because we only do the increment, so it does not matter obout the order, so it is thread safe.
-                Main.addConcurrentUser();
-                Main.addWaiting(client.getWaiting_time());
-                Main.updateMaxWorkload(queue.size());
-                Main.addServiceTime(client.getService_time());
+                Main.addConcurrentUser_1();
+                Main.addWaiting_1(client.getWaiting_time());
+                Main.updateMaxWorkload_1(queue.size());
+                Main.addServiceTime_1(client.getService_time());
             }
-            else if (Main.getConcurrent_users() < size) {
+            else if (Main.getConcurrent_users_1() < size) {
                 Thread.yield();
             }
         }catch (Exception e){}
