@@ -17,7 +17,6 @@ public class Server implements Runnable{
         Thread t1 = new Single(queue, size);
         t1.setPriority(10);
         Thread t2 = new Single(queue, size);
-        t2.setPriority(5);
         Thread t3 = new Single(queue, size);
         t3.setPriority(1);
         t1.start();

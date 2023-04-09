@@ -1,9 +1,11 @@
 import java.util.concurrent.*;
 import java.io.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server2 implements Runnable{
     private final BlockingQueue<Client> queue;
     private final int size;
+    public static AtomicInteger count = new AtomicInteger(0);
 
     public Server2(BlockingQueue<Client> q, int size){
         this.queue = q;
@@ -12,19 +14,44 @@ public class Server2 implements Runnable{
 
     @Override
     public void run(){
-        System.out.println("Servers-2 are starting...");
-        System.out.println("----------------------------------------");
-        ThreadPoolExecutor es = new ThreadPoolExecutor(12,12, 0L,
+        System.out.println("Servers are starting...");
+        new Single2(this.queue, this.size).start();
+        System.out.println("Server01 is starting...");
+        new Single2(this.queue, this.size).start();
+        System.out.println("Server02 is starting...");
+        new Single2(this.queue, this.size).start();
+        System.out.println("Server03 is starting...");
+
+        // you can add any operations in any needed case
+    }
+    public static void addCount (){
+        count.incrementAndGet();
+    }
+    public static int getCount(){
+        return count.get();
+    }
+}
+class Single2 extends Thread{
+    private final BlockingQueue<Client> queue;
+    private final long size;
+    public Single2(BlockingQueue<Client> queue, long size){
+        this.size = size;
+        this.queue = queue;
+    }
+
+    public void run() {
+        ThreadPoolExecutor es = new ThreadPoolExecutor(4, 4, 0L,
                 TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
-        System.out.println("Thread pool for Servers-2 is created.");
-        while (Main.getConcurrent_users_2() < size){
-            if (Main.clients.size() > 0){
-                es.execute(()-> new Handler2(queue, size).start());
-            }else {
+        while (Main.getConcurrent_users_2() < size) {
+            if (Main.clients.size() > 0) {
+                es.execute(() -> new Handler2(this.queue, this.size).start());
+            } else {
                 Thread.yield();
             }
         }
         es.shutdown();
+        synchronized (Server2.count){
+        if (Server2.getCount() > 1){
         System.out.println("----------------------------------------");
         System.out.println("Total Server load(Total requests): " + Main.getConcurrent_users_2());
         System.out.println("Total_waiting_time: " + Main.getTotal_Waiting_Time_2());
@@ -34,30 +61,34 @@ public class Server2 implements Runnable{
         System.out.println("Average service time: " + (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
         System.out.println("----------------------------------------");
         System.out.println("Servers-2 are shutting down...");
-
         // you can add any operations in any needed case
         System.out.println("Servers-2 are closed.");
-        System.out.println("End of the Servers-2 simulation.");
+        System.out.println("End of the Servers-1 simulation.");
+
         writeToCSV(Main.getConcurrent_users_2(), Main.getTotal_Waiting_Time_2(), Main.getTotal_Service_Time_2(),
                 Main.getMaxWorkload_2(), (Main.getTotal_Waiting_Time_2() / (double) Main.getConcurrent_users_2()),
                 (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
-        writeToCSV2(Main.getConcurrent_users_1()-Main.getConcurrent_users_2(),
-                Main.getTotal_Waiting_Time_1()-Main.getTotal_Waiting_Time_2(),
-                Main.getTotal_Service_Time_1()-Main.getTotal_Service_Time_2(),
-                Main.getMaxWorkload_1()-Main.getMaxWorkload_2(),
-                (Main.getTotal_Waiting_Time_1()) / (double)Main.getConcurrent_users_1() -
+        writeToCSV2(Main.getConcurrent_users_1() - Main.getConcurrent_users_2(),
+                Main.getTotal_Waiting_Time_1() - Main.getTotal_Waiting_Time_2(),
+                Main.getTotal_Service_Time_1() - Main.getTotal_Service_Time_2(),
+                Main.getMaxWorkload_1() - Main.getMaxWorkload_2(),
+                (Main.getTotal_Waiting_Time_1()) / (double) Main.getConcurrent_users_1() -
                         (Main.getTotal_Waiting_Time_2() / (double) Main.getConcurrent_users_2()),
-                (Main.getTotal_Service_Time_1() / (double) Main.getConcurrent_users_1())-
+                (Main.getTotal_Service_Time_1() / (double) Main.getConcurrent_users_1()) -
                         (Main.getTotal_Service_Time_2() / (double) Main.getConcurrent_users_2()));
-        System.out.println("done");
-        System.exit(0);
+        System.out.println("Step-2 finished");
+        System.exit(0);}
+        else {
+            System.out.println(Server2.getCount());
+            Server2.addCount();
+        }}
     }
     private static void writeToCSV(long concurrentUsers, long totalWaitingTime,
-        long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
+                                   long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
         String fileName = "results_2.csv";
         File file2 = new File(fileName);
         try (FileWriter fileWriter = new FileWriter(file2, true);
-            PrintWriter printWriter = new PrintWriter(fileWriter)) {
+             PrintWriter printWriter = new PrintWriter(fileWriter)) {
             // If the file is empty, write the header row
             if (file2.length() == 0) {
                 printWriter.println("Concurrent Users,Total Waiting Time,Total Service Time, Maximum Workload,Average Waiting Time,Average Service Time");
@@ -65,7 +96,7 @@ public class Server2 implements Runnable{
 
             // Write the data row
             printWriter.printf("%d,%d,%d,%d,%.2f,%.2f%n", concurrentUsers, totalWaitingTime,
-                totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
+                    totalServiceTime, maxWorkload, avgWaitingTime, avgServiceTime);
 
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
@@ -73,7 +104,7 @@ public class Server2 implements Runnable{
     }
 
     private static void writeToCSV2(long concurrentUsers, long totalWaitingTime,
-                                   long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
+                                    long totalServiceTime, long maxWorkload, double avgWaitingTime, double avgServiceTime) {
         String fileName = "results_3.csv";
         File file3 = new File(fileName);
         try (FileWriter fileWriter = new FileWriter(file3, true);
@@ -92,7 +123,6 @@ public class Server2 implements Runnable{
         }
     }
 }
-
 
 /* Handler stands for client handler
  *
