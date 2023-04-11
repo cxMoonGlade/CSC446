@@ -11,4 +11,4 @@ Make sure Java environment the installed, new versions of Java is recommended.
 javac Main.java && java Main
 ```
 
-After run the commend, the console log should output the results of both two baseline settings results for different priority methods. 
+After run the command, the console log should output the results of both two baseline settings results for different priority methods. 
